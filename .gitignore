@@ -1,0 +1,36 @@
+# =====================
+# Python cache files
+# =====================
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# =====================
+# Virtual Environment
+# =====================
+venv/
+.venv/
+
+# =====================
+# Datasets / Data files
+# =====================
+archivedata/
+data/
+dataset/
+*.csv
+*.xlsx
+*.json
+
+# =====================
+# ML Models
+# =====================
+*.h5
+*.pkl
+*.joblib
+
+# =====================
+# OS / Editor files
+# =====================
+.DS_Store
+Thumbs.db
