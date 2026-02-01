@@ -5,7 +5,7 @@ import pandas as pd
 df=pd.read_csv('archivedata/emails.csv')
 
 from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import accuracy_score, confusion_matrix ,classification_report,r2_score
+from sklearn.metrics import accuracy_score, confusion_matrix ,classification_report
 
 
 
@@ -37,7 +37,7 @@ class ModelTrainer:
 
 
             #predict model
-            y_pred=logi.predict(y_test)
+            y_pred=logi.predict(x_test)
             print(y_pred)
 
             #probability
@@ -49,23 +49,22 @@ class ModelTrainer:
             acc_sco=accuracy_score(y_test,y_pred)
             print(acc_sco)
 
-            con_matr=confusion_matrix(y_pred,y_test)
+            con_matr=confusion_matrix(y_test,y_pred)
             print(con_matr)
 
-            claasi=classification_report(y_pred,y_test)
+            claasi=classification_report(y_test , y_pred)
             print(claasi)
-
-            r2=r2_score(y_pred,y_test)
-            print(r2)
 
 
             save_object(
                 file_path=self.model_trainer_config.trained_model,
+                obj=logi
             )
                
             
 
-        
+            print("Model training completed successfully!")
+
 
 
 
