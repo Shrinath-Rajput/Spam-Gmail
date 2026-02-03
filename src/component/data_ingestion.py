@@ -31,7 +31,7 @@ class DataIngestion:
             logging.info("Read the dataset")
 
             os.makedirs(os.path.dirname(self.ingestion_config.train_data),exist_ok=True)
-            os.makedirs(os.path.dirname(self.ingestion_config.row_data,index=False,header=True))
+            os.makedirs(os.path.dirname(self.ingestion_config.row_data),exist_ok=True)
             logging.info("file and folder be created")
 
             #train and test data
