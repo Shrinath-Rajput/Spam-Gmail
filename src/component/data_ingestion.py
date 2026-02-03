@@ -11,7 +11,7 @@ pd.read_csv('archivedata/emails.csv')
 
 from src.component.data_trasformation import DataTransformation
 from src.component.data_trasformation import DataTrasformationConfig
-#from src.component.model_trainer import ModelTrainer 
+from src.component.model_trainer import ModelTrainer
 
 
 class DataIngestionConfig:
