@@ -3,6 +3,9 @@ import os
 import pickle
 import numpy as np
 
+import mlflow
+import mlflow.sklearn
+
 from sklearn.linear_model import SGDClassifier
 from sklearn.metrics import accuracy_score
 
@@ -26,40 +29,62 @@ class ModelTrainer:
 
             classes = np.unique(y_train)
 
-            # 🔥 FINAL SAFETY CHECK
+            # 🔥 SAFETY CHECK
             if len(classes) < 2:
                 raise ValueError(
                     f"Training data has only one class: {classes}. "
                     f"Model training requires at least 2 classes (spam & ham)."
                 )
 
-            model = SGDClassifier(
-                loss="log_loss",
-                max_iter=1,
-                tol=None,
-                random_state=42
-            )
+            # =========================
+            # MLflow setup
+            # =========================
+            mlflow.set_experiment("Email_Spam_Detection")
 
-            print(">>> PARTIAL FIT STARTED")
+            with mlflow.start_run():
 
-            for epoch in range(3):
-                model.partial_fit(X_train, y_train, classes=classes)
-                print(f">>> epoch {epoch + 1} completed")
+                model = SGDClassifier(
+                    loss="log_loss",
+                    max_iter=1,
+                    tol=None,
+                    random_state=42
+                )
 
-            print(">>> TRAINING COMPLETED")
+                print(">>> PARTIAL FIT STARTED")
 
-            y_pred = model.predict(X_test)
-            acc = accuracy_score(y_test, y_pred)
+                for epoch in range(3):
+                    model.partial_fit(X_train, y_train, classes=classes)
+                    print(f">>> epoch {epoch + 1} completed")
 
-            logging.info(f"Model accuracy: {acc}")
+                print(">>> TRAINING COMPLETED")
 
-            os.makedirs(os.path.dirname(self.model_path), exist_ok=True)
-            with open(self.model_path, "wb") as f:
-                pickle.dump(model, f)
+                y_pred = model.predict(X_test)
+                acc = accuracy_score(y_test, y_pred)
 
-            logging.info("Model saved successfully")
+                logging.info(f"Model accuracy: {acc}")
 
-            return acc
+                # =========================
+                # MLflow logging
+                # =========================
+                mlflow.log_param("model", "SGDClassifier")
+                mlflow.log_param("loss", "log_loss")
+                mlflow.log_param("epochs", 3)
+                mlflow.log_metric("accuracy", acc)
+
+                mlflow.sklearn.log_model(model, "spam_model")
+
+                # =========================
+                # Save model locally
+                # =========================
+                os.makedirs(os.path.dirname(self.model_path), exist_ok=True)
+                with open(self.model_path, "wb") as f:
+                    pickle.dump(model, f)
+
+                logging.info("Model saved successfully")
+
+                print(f"✅ Training complete | Accuracy: {acc}")
+
+                return acc
 
         except Exception as e:
             raise CustomException(e, sys)
