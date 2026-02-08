@@ -3,7 +3,7 @@ import os
 
 import numpy as np
 import pandas as pd
-df=pd.read_csv('archivedata/emails.csv')
+
 
 from sklearn.compose import ColumnTransformer
 from sklearn.impute import SimpleImputer
@@ -24,12 +24,13 @@ class DataTransformation:
         logging.info("succes")
 
 
-    def get_data_trasformer_obaject(self):
+    def get_data_transformer_object(self):
         
         try:
+            numerical_columns = []  #fix
             categorical_columns=["gender"]
 
-            um_pipeline = Pipeline(
+            num_pipeline = Pipeline(
                 steps=[
                     ("imputer", SimpleImputer(strategy="median")),
                     ("scaler", StandardScaler(with_mean=False))  # ✅ FIX
@@ -59,55 +60,44 @@ class DataTransformation:
         
 
     def initiate_data_trasformation(self, train_data, test_data):
-            try:
-                train_df = pd.read_csv(train_data)
-                test_df = pd.read_csv(test_data)
+        try:
+            train_df = pd.read_csv(train_data)
+            test_df = pd.read_csv(test_data)
 
-                logging.info("Read train and test data completed")
+            logging.info("Read train and test data completed")
 
-                preprocessor_obj = self.get_data_transformer_object()
+        # 🔥 EMAIL DATASET FIX
+            target_column_name = train_df.columns[-1]
 
-                target_column_name = "math_score"
+            X_train = train_df.iloc[:, 0].astype(str)
+            y_train = train_df[target_column_name]
 
-                input_feature_train_df = train_df.drop(columns=[target_column_name])
-                target_feature_train_df = train_df[target_column_name]
+            X_test = test_df.iloc[:, 0].astype(str)
+            y_test = test_df[target_column_name]
 
-                input_feature_test_df = test_df.drop(columns=[target_column_name])
-                target_feature_test_df = test_df[target_column_name]
+            from sklearn.feature_extraction.text import TfidfVectorizer
 
-                logging.info("Applying preprocessing on training and test data")
+            tfidf = TfidfVectorizer(stop_words="english", max_features=3000)
 
-                input_feature_train_arr = preprocessor_obj.fit_transform(input_feature_train_df)
-                input_feature_test_arr = preprocessor_obj.transform(input_feature_test_df)  # ✅ FIX
+            X_train_vec = tfidf.fit_transform(X_train)
+            X_test_vec = tfidf.transform(X_test)
 
-                train_arr = np.c_[
-                    input_feature_train_arr, np.array(target_feature_train_df)
-                ]
+            #train_arr = np.c_[X_train_vec.toarray(), y_train.to_numpy()]
+            #test_arr = np.c_[X_test_vec.toarray(), y_test.to_numpy()]
 
-                test_arr = np.c_[
-                    input_feature_test_arr, np.array(target_feature_test_df)
-                ]
+            train_arr = (X_train_vec, y_train.to_numpy())
+            test_arr = (X_test_vec, y_test.to_numpy())
 
-                save_object(
-                    file_path=self.data_trasformation_config.preprocessor_obj_file_path,
-                    obj=preprocessor_obj
-                )
+            save_object(
+                file_path=self.data_trasformation_config.preprocessor_obj,
+                obj=tfidf
+                 )
 
-                logging.info("Preprocessor saved successfully")
+            logging.info("Data transformation completed")
 
-                return (
-                    train_arr,
-                    test_arr,
-                    self.data_trasformation_config.preprocessor_obj_file_path
-                )
-            
+            return train_arr, test_arr, self.data_trasformation_config.preprocessor_obj
 
-            except Exception as e:
-                raise CustomException(e, sys)
+        except Exception as e:
+            raise CustomException(e, sys)
 
-
-        
-
-  
-        
         

@@ -2,7 +2,7 @@ import os
 import sys
 
 import pandas as pd
-df=pd.read_csv('archivedata/emails.csv')
+
 
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score, confusion_matrix ,classification_report
@@ -24,14 +24,18 @@ class ModelTrainer:
     def initiate_model_trainer(self,train_array,test_array):
         try:
             logging.info("split the data of the dataset")
-            x_train,y_train,x_test,y_test=(
-                train_array[:,:-1],#x
-                train_array[:,-1],#y
-                test_array[:,:-1],
-                test_array[:,-1]
-         )
             
-            logi=LogisticRegression()
+            x_train, y_train = train_array
+            x_test, y_test = test_array
+
+            
+            logi=LogisticRegression(
+                 max_iter=1000,
+                solver="liblinear" ,
+                n_jobs=1,
+                verbose=1,
+               
+            )
             logi.fit(x_train,y_train)
 
 
