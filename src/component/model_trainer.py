@@ -1,83 +1,65 @@
-import os
 import sys
+import os
+import pickle
+import numpy as np
 
-import pandas as pd
-
-
-from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import accuracy_score, confusion_matrix ,classification_report
-
-
-
+from sklearn.linear_model import SGDClassifier
+from sklearn.metrics import accuracy_score
 
 from src.exception import CustomException
 from src.logger import logging
-from src.utlis import save_object ,evaluate_models 
 
-class ModelTrainerConfig:
-    trained_model=os.path.join("artifacts","model.pkl")
 
 class ModelTrainer:
     def __init__(self):
-        self.model_trainer_config=ModelTrainerConfig()
+        self.model_path = os.path.join("artifacts", "model.pkl")
 
-    def initiate_model_trainer(self,train_array,test_array):
+    def initiate_model_trainer(self, train_arr, test_arr):
         try:
-            logging.info("split the data of the dataset")
-            
-            x_train, y_train = train_array
-            x_test, y_test = test_array
+            logging.info("Model training started")
 
-            
-            logi=LogisticRegression(
-                 max_iter=1000,
-                solver="liblinear" ,
-                n_jobs=1,
-                verbose=1,
-               
+            X_train, y_train = train_arr
+            X_test, y_test = test_arr
+
+            y_train = y_train.astype(int)
+            y_test = y_test.astype(int)
+
+            classes = np.unique(y_train)
+
+            # 🔥 FINAL SAFETY CHECK
+            if len(classes) < 2:
+                raise ValueError(
+                    f"Training data has only one class: {classes}. "
+                    f"Model training requires at least 2 classes (spam & ham)."
+                )
+
+            model = SGDClassifier(
+                loss="log_loss",
+                max_iter=1,
+                tol=None,
+                random_state=42
             )
-            logi.fit(x_train,y_train)
 
+            print(">>> PARTIAL FIT STARTED")
 
+            for epoch in range(3):
+                model.partial_fit(X_train, y_train, classes=classes)
+                print(f">>> epoch {epoch + 1} completed")
 
-            #predict model
-            y_pred=logi.predict(x_test)
-            print(y_pred)
+            print(">>> TRAINING COMPLETED")
 
-            #probability
-            pro=logi.predict_log_proba(x_test)
-            print(pro)
+            y_pred = model.predict(X_test)
+            acc = accuracy_score(y_test, y_pred)
 
+            logging.info(f"Model accuracy: {acc}")
 
-            #performance matrix
-            acc_sco=accuracy_score(y_test,y_pred)
-            print(acc_sco)
+            os.makedirs(os.path.dirname(self.model_path), exist_ok=True)
+            with open(self.model_path, "wb") as f:
+                pickle.dump(model, f)
 
-            con_matr=confusion_matrix(y_test,y_pred)
-            print(con_matr)
+            logging.info("Model saved successfully")
 
-            claasi=classification_report(y_test , y_pred)
-            print(claasi)
-
-
-            save_object(
-                file_path=self.model_trainer_config.trained_model,
-                obj=logi
-            )
-               
-            
-
-            print("Model training completed successfully!")
-
-
-
-
-
-
-
+            return acc
 
         except Exception as e:
-            raise CustomException(e,sys)
-
-
- 
+            raise CustomException(e, sys)

@@ -3,7 +3,7 @@ from src.exception import CustomException
 from src.logger import logging
 
 from src.component.data_ingestion import DataIngestion
-from src.component.data_trasformation import DataTransformation
+from src.component.data_transformation import DataTransformation
 from src.component.model_trainer import ModelTrainer
 
 
@@ -17,7 +17,7 @@ def main():
 
         # 2️⃣ Data Transformation
         data_transformation = DataTransformation()
-        train_arr, test_arr, _ = data_transformation.initiate_data_trasformation(
+        train_arr, test_arr, _ = data_transformation.initiate_data_transformation(
             train_data_path,
             test_data_path
         )

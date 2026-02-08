@@ -1,0 +1,5 @@
+[2026-02-08 17:05:06,234] INFO - ========== TRAINING PIPELINE STARTED ==========
+[2026-02-08 17:05:06,234] INFO - Entered the data ingestion method or component
+[2026-02-08 17:05:14,411] INFO - Read the dataset
+[2026-02-08 17:05:14,411] INFO - file and folder be created
+[2026-02-08 17:05:40,976] INFO - Train columns: Index(['file', 'message'], dtype='object')

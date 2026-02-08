@@ -9,8 +9,8 @@ from sklearn.model_selection import train_test_split
 pd.read_csv('archivedata/emails.csv')
 
 
-from src.component.data_trasformation import DataTransformation
-from src.component.data_trasformation import DataTrasformationConfig
+from src.component.data_transformation import DataTransformation
+from src.component.data_transformation import DataTransformationConfig
 from src.component.model_trainer import ModelTrainer
 
 

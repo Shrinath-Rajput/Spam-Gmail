@@ -1,0 +1,5 @@
+[2026-02-08 16:12:09,504] INFO - ========== TRAINING PIPELINE STARTED ==========
+[2026-02-08 16:12:09,505] INFO - Entered the data ingestion method or component
+[2026-02-08 16:12:27,031] INFO - Read the dataset
+[2026-02-08 16:12:27,032] INFO - file and folder be created
+[2026-02-08 16:12:44,012] INFO - Data Transformation started

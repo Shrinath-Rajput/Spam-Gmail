@@ -1,0 +1,8 @@
+[2026-02-08 17:09:00,658] INFO - ========== TRAINING PIPELINE STARTED ==========
+[2026-02-08 17:09:00,658] INFO - Entered the data ingestion method or component
+[2026-02-08 17:09:08,741] INFO - Read the dataset
+[2026-02-08 17:09:08,741] INFO - file and folder be created
+[2026-02-08 17:09:35,376] INFO - Train columns: Index(['file', 'message'], dtype='object')
+[2026-02-08 17:09:35,670] WARNING - Test data empty after label extraction. Using train split as test.
+[2026-02-08 17:09:35,674] INFO - Data Transformation completed successfully
+[2026-02-08 17:09:35,675] INFO - Model training started

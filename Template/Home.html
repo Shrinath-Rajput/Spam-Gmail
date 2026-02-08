@@ -4,9 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Email Detection</title>
+    <script src="../static/app.js"></script>
     <link rel="stylesheet" href="../Uploads/style.css">
      <link rel="stylesheet" href="	https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.8/js/bootstrap.min.js" integrity="sha512-nKXmKvJyiGQy343jatQlzDprflyB5c+tKCzGP3Uq67v+lmzfnZUi/ZT+fc6ITZfSC5HhaBKUIvr/nTLCV+7F+Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.8/js/bootstrap.min.js" integrity="sha512-nKXmKvJyiGQy343jatQlzDprflyB5c+tKCzGP3Uq67v+lmzfnZUi/ZT+fc6ITZfSC5HhaBKUIvr/nTLCV+7F+Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </head>
 
 <body>
@@ -14,7 +17,7 @@
         <nav class="navbar bg-body-tertiary">
   <div class="container-fluid">
     <a class="navbar-brand">Search</a>
-    <form class="d-flex" role="search">
+    <form class="d-flex" role="search" >
       <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"/>
       <button class="btn btn-outline-success" type="submit">Search</button>
     </form>
@@ -23,15 +26,25 @@
     </div>
 
     <div class="one p-3 mb-2 bg-secondary text-white">
-        <h1> Email Spam Detection</h1>
+        
+        <h1><img src="..\assests/email.png" id="imgs" style="width: 30px;height: 40px;"> Email Spam Detection </h1>
     </div>
 
-    <div class="form">
+    <div class="form ">
         <h2 > Email_Detection</h2>
-        <form action="Email_result">
+        <form method="POST">
     <div class="mb-3">
     <label for="exampleInputEmail1" class="form-label">Email address</label>
-    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+    <textarea 
+    class="form-control"
+    id="emailText"
+    name="email_text"
+    rows="6"
+    placeholder="Paste email content here..."
+    required>
+    </textarea>
+
+    
     <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
   </div>
  
@@ -39,13 +52,15 @@
     <input type="checkbox" class="form-check-input" id="exampleCheck1">
     <label class="form-check-label" for="exampleCheck1">Check me out</label>
   </div>
-  <button type="submit" class="btn btn-primary">Submit</button>
+  <button type="submit" class="btn btn-primary" onclick="checkEmail">Submit</button>
 </form>
 
 
 
         
 </div>
+<div id="resultBox"></div>
+
 
     
 </body>
