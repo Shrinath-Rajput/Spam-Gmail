@@ -10,10 +10,6 @@ from dotenv import load_dotenv
 load_dotenv()
 
 MONGO_DB_URL = os.getenv("MONGO_DB_URL", "mongodb://localhost:27017")
-
-# =========================
-# MongoDB Utility Class
-# =========================
 class ProjectDataPush:
     def __init__(self, database_name: str, collection_name: str):
         self.client = pymongo.MongoClient(MONGO_DB_URL)
@@ -29,15 +25,13 @@ class ProjectDataPush:
         return len(records)
 
 
-# =========================
-# Example Usage
-# =========================
+
 if __name__ == "__main__":
 
-    DATABASE_NAME = "dr_project"
-    COLLECTION_NAME = "prediction_history"
+    DATABASE_NAME = "Email_Detection"
+    COLLECTION_NAME = "emails_Spam_notSpam"
 
-    # 🔹 Example records (same structure as app.py inserts)
+    # 🔹 
     sample_records = [
         {
             "image": "test1.jpg",

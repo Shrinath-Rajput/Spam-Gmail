@@ -27,9 +27,8 @@ class DataTransformation:
 
             TEXT_COLUMN = "message"
 
-            # -----------------------------
-            # 🔍 AUTO-DETECT LABEL COLUMN
-            # -----------------------------
+    
+            
             possible_label_cols = ["label", "class", "category", "v1", "spam"]
             LABEL_COLUMN = None
 
