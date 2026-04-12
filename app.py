@@ -1,18 +1,21 @@
 from flask import Flask, render_template, request, jsonify
 import pickle
+import os
 
 app = Flask(__name__)
 
-# load trained model & vectorizer
-model = pickle.load(open("artifacts/model.pkl", "rb"))
-vectorizer = pickle.load(open("artifacts/preprocessing.pkl", "rb"))
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
-# Home page
+model_path = os.path.join(BASE_DIR, "artifacts", "model.pkl")
+vectorizer_path = os.path.join(BASE_DIR, "artifacts", "preprocessing.pkl")
+
+model = pickle.load(open(model_path, "rb"))
+vectorizer = pickle.load(open(vectorizer_path, "rb"))
+
 @app.route("/")
 def home():
     return render_template("index.html")
 
-# Prediction API (JS fetch uses this)
 @app.route("/predict", methods=["POST"])
 def predict():
     data = request.get_json()
@@ -22,16 +25,10 @@ def predict():
 
     email_text = data["email"]
 
-    # vectorize
     email_vec = vectorizer.transform([email_text])
-
-    # predict
     pred = model.predict(email_vec)
 
-    if pred[0] == 1:
-        return jsonify({"result": "SPAM"})
-    else:
-        return jsonify({"result": "NOT_SPAM"})
+    return jsonify({"result": "SPAM" if pred[0] == 1 else "NOT_SPAM"})
 
 if __name__ == "__main__":
     app.run(debug=True)

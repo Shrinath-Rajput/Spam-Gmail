@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Email Detection</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css">
+
+</head>
+
+<body>
+
+<div class="container mt-5">
+
+    <h1 class="mb-4">📧 Email Spam Detection</h1>
+
+    <div class="mb-3">
+        <label class="form-label">Enter Email Text</label>
+        <textarea id="emailText" class="form-control" rows="6" placeholder="Paste email here..."></textarea>
+    </div>
+
+    <button class="btn btn-primary" onclick="checkEmail()">Check</button>
+
+    <h3 class="mt-4" id="resultBox"></h3>
+
+</div>
+
+<script>
+function checkEmail() {
+
+    let email = document.getElementById("emailText").value;
+
+    fetch("/predict", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ email: email })
+    })
+    .then(res => res.json())
+    .then(data => {
+        document.getElementById("resultBox").innerText = "Result: " + data.result;
+    })
+    .catch(err => {
+        console.error(err);
+        document.getElementById("resultBox").innerText = "Error occurred";
+    });
+}
+</script>
+
+</body>
+</html>
