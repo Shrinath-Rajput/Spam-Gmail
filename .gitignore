@@ -26,8 +26,10 @@ dataset/
 # ML Models
 # =====================
 *.h5
-*.pkl
 *.joblib
+
+# ❗ allow pkl inside artifacts
+!artifacts/*.pkl
 
 # =====================
 # OS / Editor files
